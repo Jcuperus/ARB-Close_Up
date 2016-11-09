@@ -3,11 +3,14 @@ using System.Collections;
 using UnityEngine.Networking;
 using System;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class NetworkManagerScript : MonoBehaviour{
     NetworkClient myClient;
 
     void Start(){
+        DontDestroyOnLoad(this.gameObject);
+
         Button hostButton = GameObject.Find("HostButton").GetComponent<Button>();
         hostButton.onClick.AddListener(handleHost);
 
@@ -50,5 +53,6 @@ public class NetworkManagerScript : MonoBehaviour{
     // client function
     public void OnConnected(UnityEngine.Networking.NetworkMessage netMsg){
         Debug.Log("Connected to server");
+        SceneManager.LoadScene("lobbyScene");
     }
 }
