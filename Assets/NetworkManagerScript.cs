@@ -4,9 +4,13 @@ using UnityEngine.Networking;
 using System;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class NetworkManagerScript : MonoBehaviour{
     NetworkClient myClient;
+    private string nickname;
+    private bool isHost = false;
+    private List<string> serverPlayerList = new List<string>();
 
     void Start(){
         DontDestroyOnLoad(this.gameObject);
@@ -33,7 +37,9 @@ public class NetworkManagerScript : MonoBehaviour{
 
     // Create a server and listen on a port
     public void SetupServer(){
+        isHost = true;
         NetworkServer.Listen(4444);
+        NetworkServer.RegisterHandler(MsgType.Connect, OnServerConnected);
     }
 
     // Create a client and connect to the server port
@@ -54,5 +60,20 @@ public class NetworkManagerScript : MonoBehaviour{
     public void OnConnected(UnityEngine.Networking.NetworkMessage netMsg){
         Debug.Log("Connected to server");
         SceneManager.LoadScene("lobbyScene");
+    }
+
+    // server function
+    public void OnServerConnected(UnityEngine.Networking.NetworkMessage netMsg){
+        Debug.Log("server: client connected");
+        StartCoroutine(updatePlayerList());
+    }
+
+    private IEnumerator updatePlayerList(){
+        yield return new WaitForSeconds(0.5f);
+        GameObject.Find("PlayerListText").GetComponent<Text>().text = "";
+        foreach(NetworkConnection item in NetworkServer.connections) {
+            serverPlayerList.Add(item.address);
+            GameObject.Find("PlayerListText").GetComponent<Text>().text += "\n" + item.address;
+        }
     }
 }
