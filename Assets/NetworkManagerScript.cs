@@ -22,16 +22,16 @@ public class NetworkManagerScript : MonoBehaviour{
         joinButton.onClick.AddListener(handleJoin);
     }
 
-    private void handleHost(){
+    public void handleHost(){
         SetupServer();
         SetupLocalClient();
     }
 
-    private void handleJoin(){
+    public void handleJoin(){
         SetupClient();
     }
 
-    private void handleStart() {
+    public void handleStart() {
         NetworkMessageBase clientMessage = new NetworkMessageBase(JsonUtility.ToJson(new NetworkInstanceVars("start")));
         NetworkServer.SendToAll(1337, clientMessage);
     }
@@ -72,16 +72,18 @@ public class NetworkManagerScript : MonoBehaviour{
 
         switch(json.messageType) {
             case "player list":
+                Debug.Log("Message type: player list");
                 GameObject.Find("PlayerListText").GetComponent<Text>().text = "";
                 foreach(string playahIP in json.playerList) {
                     GameObject.Find("PlayerListText").GetComponent<Text>().text += "\n" + playahIP;
                 }
                 break;
             case "start":
-                Debug.Log("server message start");
+                Debug.Log("Message type: start");
+                SceneManager.LoadScene("mainScene");
                 break;
             default:
-                Debug.Log("unknown server message: "+json.messageType);
+                Debug.Log("unknown server message type: "+json.messageType);
                 break;
         }
     }
