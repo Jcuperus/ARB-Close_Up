@@ -8,7 +8,6 @@ using System.Collections.Generic;
 
 public class NetworkManagerScript : MonoBehaviour{
     NetworkClient myClient;
-    private string nickname;
     private bool isHost = false;
     private List<string> serverPlayerList = new List<string>();
 
@@ -62,9 +61,8 @@ public class NetworkManagerScript : MonoBehaviour{
     public void OnConnected(UnityEngine.Networking.NetworkMessage netMsg){
         Debug.Log("Connected to server");
         SceneManager.LoadScene("lobbyScene");
-        foreach(NetworkConnection item in NetworkServer.connections) {
-            Debug.Log(item.address);
-        }
+
+        GameObject.Find("StartButton").SetActive(isHost);
     }
 
     //client function
@@ -94,5 +92,9 @@ public class NetworkManagerScript : MonoBehaviour{
         string jsonPlayerList = JsonUtility.ToJson(new NetworkInstanceVars("player list", serverPlayerList.ToArray()));
         NetworkMessageBase clientMessage = new NetworkMessageBase(jsonPlayerList);
         NetworkServer.SendToAll(1337, clientMessage);
+    }
+
+    public bool getIsHost() {
+        return isHost;
     }
 }
