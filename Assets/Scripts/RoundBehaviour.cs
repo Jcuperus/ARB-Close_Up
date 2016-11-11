@@ -12,10 +12,17 @@ public class RoundBehaviour : MonoBehaviour {
         timeLeft = timeLimit;
         StartCoroutine(updateTimer());
         objectiveCollection = GameObject.FindGameObjectsWithTag(objectiveTag);
+        NetworkManagerScript networkManagerScript = (NetworkManagerScript)GameObject.Find("NetworkManager").GetComponent(typeof(NetworkManagerScript));
+        setObjective(networkManagerScript.objective);
     }
 
     public void setObjective(int index) {
+        Debug.Log(objectiveCollection[index]);
         objective = objectiveCollection[index];
+    }
+
+    public void nextRound() {
+        
     }
 
     private IEnumerator updateTimer() {
@@ -23,7 +30,6 @@ public class RoundBehaviour : MonoBehaviour {
         while (this.isActiveAndEnabled) {
             yield return new WaitForSeconds(1f);
             timeLeft--;
-            Debug.Log("time left: " + timeLeft);
         }
     }
 

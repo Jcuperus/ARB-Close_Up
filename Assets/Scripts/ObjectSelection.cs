@@ -38,7 +38,7 @@ public class ObjectSelection : MonoBehaviour {
     {
         RaycastHit rhit;
         GameObject gObjectHit = null;
-
+        
         if (Physics.Raycast(ray, out rhit, 1000.0f) && canSelect)
         {
             if (round.checkObjective(rhit.transform.gameObject)) {
@@ -46,7 +46,7 @@ public class ObjectSelection : MonoBehaviour {
             }
             else {
                 Debug.Log("Incorrect selection");
-                disableSelection();
+                StartCoroutine(disableSelection());
             }
         }
     }
