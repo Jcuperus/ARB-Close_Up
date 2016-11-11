@@ -46,6 +46,7 @@ public class NetworkManagerScript : MonoBehaviour{
     public void SetupClient(){
         myClient = new NetworkClient();
         myClient.RegisterHandler(MsgType.Connect, OnConnected);
+        myClient.RegisterHandler(1337, OnServerMessage);
         string ipInput = GameObject.Find("IPInputField/Text").GetComponent<Text>().text;
         myClient.Connect(ipInput, 4444);
     }
@@ -68,12 +69,12 @@ public class NetworkManagerScript : MonoBehaviour{
 
     //client function
     public void OnServerMessage(UnityEngine.Networking.NetworkMessage netMsg) {
-        Debug.Log(netMsg.reader.ReadString());
         NetworkInstanceVars json = JsonUtility.FromJson<NetworkInstanceVars>(netMsg.reader.ReadString());
-        //Debug.Log("player list");
-        //foreach (string item in serverPlayerList) {
-        //    Debug.Log("player:" + item);
-        //}
+
+        GameObject.Find("PlayerListText").GetComponent<Text>().text = "";
+        foreach(string playahIP in json.playerList) {
+            GameObject.Find("PlayerListText").GetComponent<Text>().text += "\n" + playahIP;
+        }
     }
 
     // server function
