@@ -54,12 +54,21 @@ public class NetworkManagerScript : MonoBehaviour{
     public void SetupLocalClient(){
         myClient = ClientScene.ConnectLocalServer();
         myClient.RegisterHandler(MsgType.Connect, OnConnected);
+        myClient.RegisterHandler(1337, OnServerMessage);
     }
 
     // client function
     public void OnConnected(UnityEngine.Networking.NetworkMessage netMsg){
         Debug.Log("Connected to server");
         SceneManager.LoadScene("lobbyScene");
+        foreach(NetworkConnection item in NetworkServer.connections) {
+            Debug.Log(item.address);
+        }
+    }
+
+    //client function
+    public void OnServerMessage(UnityEngine.Networking.NetworkMessage netMsg) {
+        Debug.Log(netMsg.reader.ReadString());
     }
 
     // server function
@@ -75,5 +84,8 @@ public class NetworkManagerScript : MonoBehaviour{
             serverPlayerList.Add(item.address);
             GameObject.Find("PlayerListText").GetComponent<Text>().text += "\n" + item.address;
         }
+        NetworkMessage clientMessage = new NetworkMessage("test message");
+        NetworkServer.SendToAll(1337, clientMessage);
+
     }
 }
