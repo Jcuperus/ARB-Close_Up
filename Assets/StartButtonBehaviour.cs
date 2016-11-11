@@ -2,8 +2,8 @@
 using System.Collections;
 
 public class StartButtonBehaviour : MonoBehaviour {
-    //public NetworkManagerScript script;
     void Awake() {
-        //this.gameObject.SetActive(script.getIsHost());
+        NetworkManagerScript networkManagerScript = (NetworkManagerScript)GameObject.Find("NetworkManager").GetComponent(typeof(NetworkManagerScript));
+        this.gameObject.SetActive(networkManagerScript.getIsHost());
     }
 }

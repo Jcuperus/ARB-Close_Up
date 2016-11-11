@@ -10,6 +10,7 @@ public class NetworkManagerScript : MonoBehaviour{
     NetworkClient myClient;
     private bool isHost = false;
     private List<string> serverPlayerList = new List<string>();
+    private string nickname;
 
     void Start(){
         DontDestroyOnLoad(this.gameObject);
@@ -30,8 +31,9 @@ public class NetworkManagerScript : MonoBehaviour{
         SetupClient();
     }
 
-    void Update(){
-        
+    private void handleStart() {
+        NetworkMessageBase clientMessage = new NetworkMessageBase(JsonUtility.ToJson(new NetworkInstanceVars("start")));
+        NetworkServer.SendToAll(1337, clientMessage);
     }
 
     // Create a server and listen on a port
@@ -60,18 +62,27 @@ public class NetworkManagerScript : MonoBehaviour{
     // client function
     public void OnConnected(UnityEngine.Networking.NetworkMessage netMsg){
         Debug.Log("Connected to server");
+        nickname = GameObject.Find("NameInputField/Text").GetComponent<Text>().text;
         SceneManager.LoadScene("lobbyScene");
-
-        GameObject.Find("StartButton").SetActive(isHost);
     }
 
     //client function
     public void OnServerMessage(UnityEngine.Networking.NetworkMessage netMsg) {
         NetworkInstanceVars json = JsonUtility.FromJson<NetworkInstanceVars>(netMsg.reader.ReadString());
 
-        GameObject.Find("PlayerListText").GetComponent<Text>().text = "";
-        foreach(string playahIP in json.playerList) {
-            GameObject.Find("PlayerListText").GetComponent<Text>().text += "\n" + playahIP;
+        switch(json.messageType) {
+            case "player list":
+                GameObject.Find("PlayerListText").GetComponent<Text>().text = "";
+                foreach(string playahIP in json.playerList) {
+                    GameObject.Find("PlayerListText").GetComponent<Text>().text += "\n" + playahIP;
+                }
+                break;
+            case "start":
+                Debug.Log("server message start");
+                break;
+            default:
+                Debug.Log("unknown server message: "+json.messageType);
+                break;
         }
     }
 
