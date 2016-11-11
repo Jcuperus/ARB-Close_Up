@@ -69,6 +69,11 @@ public class NetworkManagerScript : MonoBehaviour{
     //client function
     public void OnServerMessage(UnityEngine.Networking.NetworkMessage netMsg) {
         Debug.Log(netMsg.reader.ReadString());
+        NetworkInstanceVars json = JsonUtility.FromJson<NetworkInstanceVars>(netMsg.reader.ReadString());
+        //Debug.Log("player list");
+        //foreach (string item in serverPlayerList) {
+        //    Debug.Log("player:" + item);
+        //}
     }
 
     // server function
@@ -80,12 +85,13 @@ public class NetworkManagerScript : MonoBehaviour{
     private IEnumerator updatePlayerList(){
         yield return new WaitForSeconds(0.5f);
         GameObject.Find("PlayerListText").GetComponent<Text>().text = "";
+        serverPlayerList = new List<string>();
         foreach(NetworkConnection item in NetworkServer.connections) {
             serverPlayerList.Add(item.address);
             GameObject.Find("PlayerListText").GetComponent<Text>().text += "\n" + item.address;
         }
-        NetworkMessage clientMessage = new NetworkMessage("test message");
+        string jsonPlayerList = JsonUtility.ToJson(new NetworkInstanceVars("player list", serverPlayerList.ToArray()));
+        NetworkMessageBase clientMessage = new NetworkMessageBase(jsonPlayerList);
         NetworkServer.SendToAll(1337, clientMessage);
-
     }
 }

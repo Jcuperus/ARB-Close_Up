@@ -2,10 +2,10 @@
 using System.Collections;
 using UnityEngine.Networking;
 
-public class NetworkMessage : MessageBase {
+public class NetworkMessageBase : MessageBase {
     public string message;
 
-    public NetworkMessage(string message) {
+    public NetworkMessageBase(string message) {
         this.message = message;
     }
 }
