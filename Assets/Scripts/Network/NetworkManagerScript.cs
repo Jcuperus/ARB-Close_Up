@@ -11,6 +11,8 @@ public class NetworkManagerScript : MonoBehaviour{
     private bool isHost = false;
     private List<string> serverPlayerList = new List<string>();
     private string nickname;
+    //public int objective;
+    //public RoundBehaviour round;
 
     void Start(){
         DontDestroyOnLoad(this.gameObject);
@@ -32,7 +34,8 @@ public class NetworkManagerScript : MonoBehaviour{
     }
 
     public void handleStart() {
-        NetworkMessageBase clientMessage = new NetworkMessageBase(JsonUtility.ToJson(new NetworkInstanceVars("start")));
+        int objective = 0; //random (range is het aantal npc's)
+        NetworkMessageBase clientMessage = new NetworkMessageBase(JsonUtility.ToJson(new NetworkInstanceVars("start", objective)));
         NetworkServer.SendToAll(1337, clientMessage);
     }
 
@@ -81,6 +84,8 @@ public class NetworkManagerScript : MonoBehaviour{
             case "start":
                 Debug.Log("Message type: start");
                 SceneManager.LoadScene("mainScene");
+                RoundBehaviour roundManagerScript = (RoundBehaviour)GameObject.Find("RoundManager").GetComponent(typeof(RoundBehaviour));
+                roundManagerScript.setObjective(json.objective);
                 break;
             default:
                 Debug.Log("unknown server message type: "+json.messageType);
