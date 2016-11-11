@@ -44,6 +44,7 @@ public class NetworkManagerScript : MonoBehaviour{
         isHost = true;
         NetworkServer.Listen(4444);
         NetworkServer.RegisterHandler(MsgType.Connect, OnServerConnected);
+        NetworkServer.RegisterHandler(1337, OnClientMessage);
     }
 
     // Create a client and connect to the server port
@@ -75,22 +76,34 @@ public class NetworkManagerScript : MonoBehaviour{
 
         switch(json.messageType) {
             case "player list":
-                Debug.Log("Message type: player list");
+                Debug.Log("Client Message type: player list");
                 GameObject.Find("PlayerListText").GetComponent<Text>().text = "";
                 foreach(string playahIP in json.playerList) {
                     GameObject.Find("PlayerListText").GetComponent<Text>().text += "\n" + playahIP;
                 }
                 break;
             case "start":
-                Debug.Log("Message type: start");
+                Debug.Log("Client Message type: start");
                 SceneManager.LoadScene("mainScene");
                 objective = json.objective;
-                //RoundBehaviour roundManagerScript = (RoundBehaviour)GameObject.Find("RoundManager").GetComponent(typeof(RoundBehaviour));
-                //roundManagerScript.setObjective(json.objective);
-                
                 break;
             default:
                 Debug.Log("unknown server message type: "+json.messageType);
+                break;
+        }
+    }
+
+    //server function
+    public void OnClientMessage(UnityEngine.Networking.NetworkMessage netMsg) {
+        NetworkInstanceVars json = JsonUtility.FromJson<NetworkInstanceVars>(netMsg.reader.ReadString());
+
+        switch(json.messageType) {
+            case "winner":
+                Debug.Log("Server Message type: winner");
+                
+                break;
+            default:
+                Debug.Log("unknown client message type: " + json.messageType);
                 break;
         }
     }
@@ -116,5 +129,9 @@ public class NetworkManagerScript : MonoBehaviour{
 
     public bool getIsHost() {
         return isHost;
+    }
+
+    public void sendWinnerMessageToServer() {
+        myClient.Send(1337, new NetworkMessageBase(JsonUtility.ToJson(new NetworkInstanceVars("winner"))));
     }
 }

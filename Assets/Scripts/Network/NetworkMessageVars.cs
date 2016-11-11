@@ -6,7 +6,6 @@ public class NetworkInstanceVars : MessageBase {
     public string messageType;
     public string[] playerList;
     public int objective;
-    public string winner;
 
     public NetworkInstanceVars(string messageType, string[] playerList) {
         this.messageType = messageType;
@@ -20,10 +19,5 @@ public class NetworkInstanceVars : MessageBase {
     public NetworkInstanceVars(string messageType, int objective) {
         this.messageType = messageType;
         this.objective = objective;
-    }
-
-    public NetworkInstanceVars(string messageType, string winner) {
-        this.messageType = messageType;
-        this.winner = winner;
     }
 }
