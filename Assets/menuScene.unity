@@ -899,9 +899,11 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1113976094}
+  - 114: {fileID: 1113976096}
   - 114: {fileID: 1113976095}
+  - 114: {fileID: 1113976097}
   m_Layer: 0
-  m_Name: NetworkManager
+  m_Name: Managers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -928,7 +930,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 1113976093}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 476c4590d9f1df24483938988c564973, type: 3}
+  m_Script: {fileID: 11500000, guid: c13dfd99ebeee494db97a6a2659cba81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1113976096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1113976093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc08bbd1567889b4a9d9b7d56cde4d20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1113976097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1113976093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f71274574135d4c4cb37ab810323d9c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1236779258

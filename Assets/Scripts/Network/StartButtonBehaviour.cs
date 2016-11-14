@@ -4,9 +4,10 @@ using UnityEngine.UI;
 
 public class StartButtonBehaviour : MonoBehaviour {
     void Awake() {
-        NetworkManagerScript networkManagerScript = (NetworkManagerScript)GameObject.Find("NetworkManager").GetComponent(typeof(NetworkManagerScript));
+        UIManager uiManagerScript = (UIManager)GameObject.Find("Managers").GetComponent(typeof(UIManager));
+        NetworkClientManager clientManager = (NetworkClientManager)GetComponent(typeof(NetworkClientManager));
         Button joinButton = GameObject.Find("StartButton").GetComponent<Button>();
-        joinButton.onClick.AddListener(networkManagerScript.handleStart);
-        this.gameObject.SetActive(networkManagerScript.getIsHost());
+        joinButton.onClick.AddListener(uiManagerScript.handleStart);
+        this.gameObject.SetActive(clientManager.getIsHost());
     }
 }

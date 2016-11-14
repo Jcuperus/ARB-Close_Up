@@ -12,8 +12,8 @@ public class RoundBehaviour : MonoBehaviour {
         timeLeft = timeLimit;
         StartCoroutine(updateTimer());
         objectiveCollection = GameObject.FindGameObjectsWithTag(objectiveTag);
-        NetworkManagerScript networkManagerScript = (NetworkManagerScript)GameObject.Find("NetworkManager").GetComponent(typeof(NetworkManagerScript));
-        setObjective(networkManagerScript.objective);
+        NetworkClientManager clientManager = (NetworkClientManager)GetComponent(typeof(NetworkClientManager));
+        setObjective(clientManager.getObjective());
     }
 
     public void setObjective(int index) {
