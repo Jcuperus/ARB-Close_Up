@@ -5,7 +5,10 @@ using UnityEngine.Networking;
 
 public class NetworkServerManager : MonoBehaviour {
     private Dictionary<string, string> serverPlayerList = new Dictionary<string, string>();
+    private Dictionary<string, int> serverScoreList = new Dictionary<string, int>();
     private NetworkClientManager clientManager;
+    private bool first = true;
+    private int objectiveCount = 3; //Get amount of objectives
 
     void Start() {
         clientManager = (NetworkClientManager)GetComponent(typeof(NetworkClientManager));
@@ -13,7 +16,17 @@ public class NetworkServerManager : MonoBehaviour {
     }
 
     public void startRound() {
-        int objective = 0; //random (range is het aantal npc's)
+        int objective = Random.Range(0, objectiveCount-1); //random (range is het aantal npc's)
+        Debug.Log("objective: " + objective);
+
+        if (first) { //Init scoreboard
+            Debug.Log("setting scrore board");
+            foreach (KeyValuePair<string, string> player in serverPlayerList) {
+                serverScoreList.Add(player.Key, 0);
+            }
+            first = false;
+        }
+
         NetworkMessageBase clientMessage = new NetworkMessageBase(JsonUtility.ToJson(new NetworkInstanceVars("start", objective)));
         NetworkServer.SendToAll(1337, clientMessage);
     }
@@ -32,6 +45,14 @@ public class NetworkServerManager : MonoBehaviour {
             case "winner":
                 Debug.Log("Server Message type: winner: " + serverPlayerList[netMsg.conn.address]);
                 sendWinnerMessageToClient(netMsg.conn.address);
+
+                //Next round, update scores
+                serverScoreList[netMsg.conn.address]++;
+                Debug.Log("Scoreboard");
+                foreach (KeyValuePair<string, int> score in serverScoreList) {
+                    Debug.Log(score.Key + ": " + score.Value + "point(s)");
+                }
+                startRound();
                 break;
             case "name":
                 Debug.Log("Server Message type: name: " + json.name);

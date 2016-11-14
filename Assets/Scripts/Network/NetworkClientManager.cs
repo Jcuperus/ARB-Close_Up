@@ -50,7 +50,10 @@ public class NetworkClientManager : MonoBehaviour {
                 break;
             case "winner":
                 Debug.Log("Client Message type: winner: " + json.name);
-                //popup ofzo
+
+                //winner panel show subroutine
+                StartCoroutine(uiManager.showWinnerPanel(json.name));
+                //
                 break;
             default:
                 Debug.Log("unknown message from server type: " + json.messageType);
