@@ -52,7 +52,9 @@ public class NetworkServerManager : MonoBehaviour {
                 foreach (KeyValuePair<string, int> score in serverScoreList) {
                     Debug.Log(score.Key + ": " + score.Value + "point(s)");
                 }
-                startRound();
+                
+                objectiveCount = 
+
                 break;
             case "name":
                 Debug.Log("Server Message type: name: " + json.name);
