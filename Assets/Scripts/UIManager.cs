@@ -7,6 +7,8 @@ public class UIManager : MonoBehaviour {
     private Button hostButton;
     private Button joinButton;
     private Button startButton;
+    private Image IncorrectFeedbackPopupImage;
+    private Image CorrectFeedbackPopupImage;
     private NetworkClientManager clientManager;
     private NetworkServerManager serverManager;
 
@@ -27,6 +29,14 @@ public class UIManager : MonoBehaviour {
         this.startButton = startButton;
     }
 
+    public void setCorrectFeedbackPopup(Image feedbackPopupImage) {
+        this.CorrectFeedbackPopupImage = feedbackPopupImage;
+    }
+
+    public void setIncorrectFeedbackPopup(Image feedbackPopupImage) {
+        this.IncorrectFeedbackPopupImage = feedbackPopupImage;
+    }
+
     public void handleHost() {
         serverManager.SetupServer();
         clientManager.SetupLocalClient();
@@ -45,6 +55,21 @@ public class UIManager : MonoBehaviour {
         GameObject.Find("PlayerListText").GetComponent<Text>().text = "";
         foreach(string name in clientPlayerList) {
             GameObject.Find("PlayerListText").GetComponent<Text>().text += "\n" + name;
+        }
+    }
+
+    public IEnumerator triggerFeedbackPopup(bool correct) {
+        showFeedbackPopup(correct, true);
+        yield return new WaitForSeconds(2);
+        showFeedbackPopup(correct, false);
+    }
+
+    private void showFeedbackPopup(bool correct, bool show) {
+        if(correct) {
+            CorrectFeedbackPopupImage.gameObject.SetActive(show);
+        }
+        else {
+            IncorrectFeedbackPopupImage.gameObject.SetActive(show);
         }
     }
 }

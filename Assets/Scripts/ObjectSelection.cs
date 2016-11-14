@@ -41,13 +41,16 @@ public class ObjectSelection : MonoBehaviour {
         
         if (Physics.Raycast(ray, out rhit, 1000.0f) && canSelect)
         {
+            UIManager uiManager = (UIManager)GameObject.Find("Managers").GetComponent(typeof(UIManager));
             if (round.checkObjective(rhit.transform.gameObject)) {
                 Debug.Log("Correct selection");
+                StartCoroutine(uiManager.triggerFeedbackPopup(true));
                 NetworkClientManager clientManager = (NetworkClientManager)GameObject.Find("Managers").GetComponent(typeof(NetworkClientManager));
                 clientManager.sendWinnerMessageToServer();
             }
             else {
                 Debug.Log("Incorrect selection");
+                StartCoroutine(uiManager.triggerFeedbackPopup(false));
                 StartCoroutine(disableSelection());
             }
         }
