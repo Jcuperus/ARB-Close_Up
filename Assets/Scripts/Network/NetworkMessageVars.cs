@@ -1,15 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
+using System.Collections.Generic;
 
 public class NetworkInstanceVars : MessageBase {
     public string messageType;
-    public string[] playerList;
+    public string[] playerListName;
     public int objective;
+    public string name;
 
-    public NetworkInstanceVars(string messageType, string[] playerList) {
+    public NetworkInstanceVars(string messageType, string[] playerListName) {
         this.messageType = messageType;
-        this.playerList = playerList;
+        this.playerListName = playerListName;
     }
 
     public NetworkInstanceVars(string messageType) {
@@ -19,5 +21,9 @@ public class NetworkInstanceVars : MessageBase {
     public NetworkInstanceVars(string messageType, int objective) {
         this.messageType = messageType;
         this.objective = objective;
+    }
+    public NetworkInstanceVars(string messageType, string name) {
+        this.messageType = messageType;
+        this.name = name;
     }
 }

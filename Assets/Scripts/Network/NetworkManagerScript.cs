@@ -9,10 +9,10 @@ using System.Collections.Generic;
 public class NetworkManagerScript : MonoBehaviour{
     NetworkClient myClient;
     private bool isHost = false;
-    private List<string> serverPlayerList = new List<string>();
+    private Dictionary<string, string> serverPlayerList = new Dictionary<string, string>();
+    private List<string> clientPlayerList = new List<string>();
     private string nickname;
     public int objective;
-    //public RoundBehaviour round;
 
     void Start(){
         DontDestroyOnLoad(this.gameObject);
@@ -63,32 +63,22 @@ public class NetworkManagerScript : MonoBehaviour{
         myClient.RegisterHandler(1337, OnServerMessage);
     }
 
-    // client function
-    public void OnConnected(UnityEngine.Networking.NetworkMessage netMsg){
-        Debug.Log("Connected to server");
-        nickname = GameObject.Find("NameInputField/Text").GetComponent<Text>().text;
-        SceneManager.LoadScene("lobbyScene");
-    }
-
     //client function
     public void OnServerMessage(UnityEngine.Networking.NetworkMessage netMsg) {
         NetworkInstanceVars json = JsonUtility.FromJson<NetworkInstanceVars>(netMsg.reader.ReadString());
 
         switch(json.messageType) {
-            case "player list":
-                Debug.Log("Client Message type: player list");
-                GameObject.Find("PlayerListText").GetComponent<Text>().text = "";
-                foreach(string playahIP in json.playerList) {
-                    GameObject.Find("PlayerListText").GetComponent<Text>().text += "\n" + playahIP;
-                }
-                break;
             case "start":
                 Debug.Log("Client Message type: start");
                 SceneManager.LoadScene("mainScene");
                 objective = json.objective;
                 break;
+            case "player list":
+                Debug.Log("Client Message type: name");
+                updatePlayerListUI();
+                break;
             default:
-                Debug.Log("unknown server message type: "+json.messageType);
+                Debug.Log("unknown message from server type: "+json.messageType);
                 break;
         }
     }
@@ -99,11 +89,18 @@ public class NetworkManagerScript : MonoBehaviour{
 
         switch(json.messageType) {
             case "winner":
-                Debug.Log("Server Message type: winner");
-                
+                Debug.Log("Server Message type: winner: "+netMsg.conn.address);           
+                break;
+            case "name":
+                Debug.Log("Server Message type: name: " + json.name);
+                serverPlayerList[netMsg.conn.address] = json.name;
+                if(!clientPlayerList.Contains(json.name)) {
+                    clientPlayerList.Add(json.name);
+                }
+                syncPlayerLists();
                 break;
             default:
-                Debug.Log("unknown client message type: " + json.messageType);
+                Debug.Log("unknown message from client type: " + json.messageType);
                 break;
         }
     }
@@ -111,24 +108,33 @@ public class NetworkManagerScript : MonoBehaviour{
     // server function
     public void OnServerConnected(UnityEngine.Networking.NetworkMessage netMsg){
         Debug.Log("server: client connected");
-        StartCoroutine(updatePlayerList());
+        serverPlayerList[netMsg.conn.address] = null;
     }
 
-    private IEnumerator updatePlayerList(){
-        yield return new WaitForSeconds(0.5f);
+    // client function
+    public void OnConnected(UnityEngine.Networking.NetworkMessage netMsg) {
+        Debug.Log("Connected to server");
+        nickname = GameObject.Find("NameInputField/Text").GetComponent<Text>().text;
+        SceneManager.LoadScene("lobbyScene");
+        myClient.Send(1337, new NetworkMessageBase(JsonUtility.ToJson(new NetworkInstanceVars("name", nickname))));
+    }
+
+    private void updatePlayerListUI() {
         GameObject.Find("PlayerListText").GetComponent<Text>().text = "";
-        serverPlayerList = new List<string>();
-        foreach(NetworkConnection item in NetworkServer.connections) {
-            serverPlayerList.Add(item.address);
-            GameObject.Find("PlayerListText").GetComponent<Text>().text += "\n" + item.address;
+        foreach(string name in clientPlayerList) {
+            GameObject.Find("PlayerListText").GetComponent<Text>().text += "\n" + name;
         }
-        string jsonPlayerList = JsonUtility.ToJson(new NetworkInstanceVars("player list", serverPlayerList.ToArray()));
-        NetworkMessageBase clientMessage = new NetworkMessageBase(jsonPlayerList);
-        NetworkServer.SendToAll(1337, clientMessage);
     }
 
     public bool getIsHost() {
         return isHost;
+    }
+
+    //server function
+    private void syncPlayerLists() {
+        string jsonPlayerList = JsonUtility.ToJson(new NetworkInstanceVars("player list", clientPlayerList.ToArray()));
+        NetworkMessageBase clientMessage = new NetworkMessageBase(jsonPlayerList);
+        NetworkServer.SendToAll(1337, clientMessage);
     }
 
     public void sendWinnerMessageToServer() {
