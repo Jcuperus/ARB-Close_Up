@@ -78,6 +78,10 @@ public class NetworkManagerScript : MonoBehaviour{
                 clientPlayerList = new List<string>(json.playerListName);
                 updatePlayerListUI();
                 break;
+            case "winner":
+                Debug.Log("Client Message type: winner: "+json.name);
+                //popup ofzo
+                break;
             default:
                 Debug.Log("unknown message from server type: "+json.messageType);
                 break;
@@ -90,7 +94,8 @@ public class NetworkManagerScript : MonoBehaviour{
 
         switch(json.messageType) {
             case "winner":
-                Debug.Log("Server Message type: winner: "+netMsg.conn.address);           
+                Debug.Log("Server Message type: winner: "+serverPlayerList[netMsg.conn.address]);
+                sendWinnerMessageToClient(netMsg.conn.address);
                 break;
             case "name":
                 Debug.Log("Server Message type: name: " + json.name);
@@ -134,6 +139,13 @@ public class NetworkManagerScript : MonoBehaviour{
     //server function
     private void syncPlayerLists() {
         string jsonPlayerList = JsonUtility.ToJson(new NetworkInstanceVars("player list", clientPlayerList.ToArray()));
+        NetworkMessageBase clientMessage = new NetworkMessageBase(jsonPlayerList);
+        NetworkServer.SendToAll(1337, clientMessage);
+    }
+
+    //server function
+    private void sendWinnerMessageToClient(string ip) {
+        string jsonPlayerList = JsonUtility.ToJson(new NetworkInstanceVars("winner", serverPlayerList[ip]));
         NetworkMessageBase clientMessage = new NetworkMessageBase(jsonPlayerList);
         NetworkServer.SendToAll(1337, clientMessage);
     }
