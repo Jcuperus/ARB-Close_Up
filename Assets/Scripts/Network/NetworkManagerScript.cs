@@ -75,6 +75,7 @@ public class NetworkManagerScript : MonoBehaviour{
                 break;
             case "player list":
                 Debug.Log("Client Message type: name");
+                clientPlayerList = new List<string>(json.playerListName);
                 updatePlayerListUI();
                 break;
             default:
