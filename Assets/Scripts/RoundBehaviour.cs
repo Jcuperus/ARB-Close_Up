@@ -12,7 +12,7 @@ public class RoundBehaviour : MonoBehaviour {
         timeLeft = timeLimit;
         StartCoroutine(updateTimer());
         objectiveCollection = GameObject.FindGameObjectsWithTag(objectiveTag);
-        NetworkClientManager clientManager = (NetworkClientManager)GetComponent(typeof(NetworkClientManager));
+        NetworkClientManager clientManager = (NetworkClientManager)GameObject.Find("Managers").GetComponent(typeof(NetworkClientManager));
         setObjective(clientManager.getObjective());
     }
 

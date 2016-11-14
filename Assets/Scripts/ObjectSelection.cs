@@ -43,7 +43,7 @@ public class ObjectSelection : MonoBehaviour {
         {
             if (round.checkObjective(rhit.transform.gameObject)) {
                 Debug.Log("Correct selection");
-                NetworkClientManager clientManager = (NetworkClientManager)GetComponent(typeof(NetworkClientManager));
+                NetworkClientManager clientManager = (NetworkClientManager)GameObject.Find("Managers").GetComponent(typeof(NetworkClientManager));
                 clientManager.sendWinnerMessageToServer();
             }
             else {
