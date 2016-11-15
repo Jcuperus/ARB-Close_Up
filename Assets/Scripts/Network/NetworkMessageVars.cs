@@ -22,8 +22,15 @@ public class NetworkInstanceVars : MessageBase {
         this.messageType = messageType;
         this.objective = objective;
     }
+
     public NetworkInstanceVars(string messageType, string name) {
         this.messageType = messageType;
         this.name = name;
+    }
+
+    public NetworkInstanceVars(string messageType, string name, int objective) {
+        this.messageType = messageType;
+        this.name = name;
+        this.objective = objective;
     }
 }

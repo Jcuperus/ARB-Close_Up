@@ -90,48 +90,6 @@ NavMeshSettings:
     cellSize: 0.16666667
     manualCellSize: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &69071666
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 69071668}
-  - 114: {fileID: 69071667}
-  m_Layer: 0
-  m_Name: RoundManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &69071667
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 69071666}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 734690a465dc066469fc10bd5709c44b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objective: {fileID: 0}
-  timeLimit: 90
---- !u!4 &69071668
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 69071666}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -285.19592, y: -413.49466, z: 492.49924}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
 --- !u!1 &290584319
 GameObject:
   m_ObjectHideFlags: 0
@@ -883,7 +841,7 @@ MonoBehaviour:
   colLayer:
     serializedVersion: 2
     m_Bits: 256
-  round: {fileID: 69071667}
+  round: {fileID: 0}
 --- !u!1 &1605621742
 GameObject:
   m_ObjectHideFlags: 0
@@ -1221,12 +1179,12 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1972869064}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 70b7caab5a15d524d84d517790ca6c66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timer: 5
+  timeLimit: 5
 --- !u!114 &1972869067
 MonoBehaviour:
   m_ObjectHideFlags: 0

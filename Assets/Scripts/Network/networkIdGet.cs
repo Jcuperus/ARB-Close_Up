@@ -8,7 +8,6 @@ public class networkIdGet : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        Debug.Log("ip test");
         string hostName = Dns.GetHostName();
         IPHostEntry host = Dns.GetHostEntry(hostName);
         foreach (IPAddress ip in host.AddressList) {

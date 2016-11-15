@@ -3,11 +3,13 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class TimerLabel : MonoBehaviour {
-    public int timer = 5;
+    public int timeLimit = 5;
+    private int timer;
     private Text label;
 
     void Awake () {
         //this.gameObject.SetActive(false);
+        this.timer = timeLimit;
         label = this.gameObject.GetComponent<Text>();
         StartCoroutine(countDown());
     }
@@ -23,6 +25,7 @@ public class TimerLabel : MonoBehaviour {
             yield return new WaitForSeconds(1);
             timer--;
         }
-        this.gameObject.active = false;
+        this.gameObject.SetActive(false);
+        timer = timeLimit;
     }
 }

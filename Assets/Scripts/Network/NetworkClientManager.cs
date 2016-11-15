@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class NetworkClientManager : MonoBehaviour {
     private NetworkClient myClient;
+    private RoundBehaviour round;
     private bool isHost = false;
     private List<string> clientPlayerList = new List<string>();
     private string nickname;
@@ -16,6 +17,7 @@ public class NetworkClientManager : MonoBehaviour {
     void Start() {
         DontDestroyOnLoad(this.gameObject);
         uiManager = (UIManager)GetComponent(typeof(UIManager));
+        round = GameObject.Find("Managers").GetComponent<RoundBehaviour>();
     }
 
     // Create a client and connect to the server port
@@ -42,6 +44,7 @@ public class NetworkClientManager : MonoBehaviour {
                 Debug.Log("Client Message type: start");
                 SceneManager.LoadScene("mainScene");
                 objective = json.objective;
+                round.startRound(objective);
                 break;
             case "player list":
                 Debug.Log("Client Message type: player list");
@@ -53,7 +56,9 @@ public class NetworkClientManager : MonoBehaviour {
 
                 //winner panel show subroutine
                 StartCoroutine(uiManager.showWinnerPanel(json.name));
-                //
+                objective = json.objective;
+                round.startRound(objective);
+                Debug.Log("objective: " + objective);
                 break;
             default:
                 Debug.Log("unknown message from server type: " + json.messageType);

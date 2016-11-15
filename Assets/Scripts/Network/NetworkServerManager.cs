@@ -9,6 +9,7 @@ public class NetworkServerManager : MonoBehaviour {
     private NetworkClientManager clientManager;
     private bool first = true;
     private int objectiveCount = 3; //Get amount of objectives
+    public int round = 0;
 
     void Start() {
         clientManager = (NetworkClientManager)GetComponent(typeof(NetworkClientManager));
@@ -17,10 +18,9 @@ public class NetworkServerManager : MonoBehaviour {
 
     public void startRound() {
         int objective = Random.Range(0, objectiveCount-1); //random (range is het aantal npc's)
-        Debug.Log("objective: " + objective);
 
+        //TODO: move this shit
         if (first) { //Init scoreboard
-            Debug.Log("setting scrore board");
             foreach (KeyValuePair<string, string> player in serverPlayerList) {
                 serverScoreList.Add(player.Key, 0);
             }
@@ -44,7 +44,8 @@ public class NetworkServerManager : MonoBehaviour {
         switch(json.messageType) {
             case "winner":
                 Debug.Log("Server Message type: winner: " + serverPlayerList[netMsg.conn.address]);
-                sendWinnerMessageToClient(netMsg.conn.address);
+                int objective = Random.Range(0, objectiveCount - 1);
+                sendWinnerMessageToClient(netMsg.conn.address, objective);
 
                 //Next round, update scores
                 serverScoreList[netMsg.conn.address]++;
@@ -52,9 +53,6 @@ public class NetworkServerManager : MonoBehaviour {
                 foreach (KeyValuePair<string, int> score in serverScoreList) {
                     Debug.Log(score.Key + ": " + score.Value + "point(s)");
                 }
-                
-                objectiveCount = 
-
                 break;
             case "name":
                 Debug.Log("Server Message type: name: " + json.name);
@@ -81,8 +79,8 @@ public class NetworkServerManager : MonoBehaviour {
         NetworkServer.SendToAll(1337, clientMessage);
     }
 
-    private void sendWinnerMessageToClient(string ip) {
-        string jsonPlayerList = JsonUtility.ToJson(new NetworkInstanceVars("winner", serverPlayerList[ip]));
+    private void sendWinnerMessageToClient(string ip, int objective) {
+        string jsonPlayerList = JsonUtility.ToJson(new NetworkInstanceVars("winner", serverPlayerList[ip], objective));
         NetworkMessageBase clientMessage = new NetworkMessageBase(jsonPlayerList);
         NetworkServer.SendToAll(1337, clientMessage);
     }
