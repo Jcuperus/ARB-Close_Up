@@ -11,7 +11,8 @@ public class ObjectSelection : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        
+        round = GameObject.Find("Managers").GetComponent<RoundBehaviour>();
+        round.updateObjectives();
     }
 	
 	// Update is called once per frame

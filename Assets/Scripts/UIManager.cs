@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour {
     private Button hostButton;
     private Button joinButton;
     private Button startButton;
+    private GameObject winnerPanel;
     private Image IncorrectFeedbackPopupImage;
     private Image CorrectFeedbackPopupImage;
     private NetworkClientManager clientManager;
@@ -71,5 +72,16 @@ public class UIManager : MonoBehaviour {
         else {
             IncorrectFeedbackPopupImage.gameObject.SetActive(show);
         }
+    }
+
+    public void setWinnerPanel(GameObject winnerPanel) {
+        this.winnerPanel = winnerPanel;
+    }
+
+    public IEnumerator showWinnerPanel(string winner) {
+        winnerPanel.SetActive(true);
+        winnerPanel.transform.Find("PlayerNameLabel").GetComponent<Text>().text = winner;
+        yield return new WaitForSeconds(5);
+        winnerPanel.SetActive(false);
     }
 }

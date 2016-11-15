@@ -2,27 +2,27 @@
 using System.Collections;
 
 public class RoundBehaviour : MonoBehaviour {
-    public GameObject objective;
     public int timeLimit = 90;
+    private int roundNumber = -1;
+    private int objective;
     private GameObject[] objectiveCollection;
     private string objectiveTag = "Objective";
     private int timeLeft;
 
-    void Awake() {
+    public void startRound(int objective) {
         timeLeft = timeLimit;
         StartCoroutine(updateTimer());
+        setObjective(objective);
+        roundNumber++;
+    }
+
+    public void updateObjectives() {
         objectiveCollection = GameObject.FindGameObjectsWithTag(objectiveTag);
-        NetworkClientManager clientManager = (NetworkClientManager)GameObject.Find("Managers").GetComponent(typeof(NetworkClientManager));
-        setObjective(clientManager.getObjective());
     }
 
     public void setObjective(int index) {
-        Debug.Log(objectiveCollection[index]);
-        objective = objectiveCollection[index];
-    }
-
-    public void nextRound() {
-        
+        //Debug.Log(objectiveCollection[index]);
+        this.objective = index;
     }
 
     private IEnumerator updateTimer() {
@@ -34,6 +34,6 @@ public class RoundBehaviour : MonoBehaviour {
     }
 
     public bool checkObjective(GameObject selection) {
-        return selection.Equals(objective);
+        return selection.Equals(objectiveCollection[objective]);
     }    
 }
