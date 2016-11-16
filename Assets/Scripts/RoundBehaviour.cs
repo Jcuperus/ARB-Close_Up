@@ -19,6 +19,24 @@ public class RoundBehaviour : MonoBehaviour {
 
     public void updateObjectives() {
         objectiveCollection = GameObject.FindGameObjectsWithTag(objectiveTag);
+
+        updateObjectiveUI();
+    }
+
+    public void updateObjectiveUI() {
+        Destroy(GameObject.Find("ObjectiveHolder").transform.GetChild(0).gameObject);
+
+        GameObject clone = (GameObject)Instantiate(objectiveCollection[objective], GameObject.Find("ObjectiveHolder").transform);
+
+        if(clone.GetComponent<WalkingScript>() != null) {
+            Destroy(clone.GetComponent<WalkingScript>());
+        }
+
+        clone.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+        clone.transform.GetChild(1).GetComponent<MeshRenderer>().enabled = true;
+
+        clone.transform.localPosition = new Vector3(0, 0, 0);
+        clone.transform.localRotation = new Quaternion(0, 0, 0, 0);
     }
 
     public void setObjective(int index) {

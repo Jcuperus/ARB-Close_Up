@@ -58,6 +58,7 @@ public class NetworkClientManager : MonoBehaviour {
                 StartCoroutine(uiManager.showWinnerPanel(json.name));
                 objective = json.objective;
                 round.startRound(objective);
+                round.updateObjectiveUI();
                 Debug.Log("objective: " + objective);
                 break;
             default:
