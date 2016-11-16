@@ -8,7 +8,7 @@ public class NetworkServerManager : MonoBehaviour {
     private Dictionary<string, int> serverScoreList = new Dictionary<string, int>();
     private NetworkClientManager clientManager;
     private bool first = true;
-    private int objectiveCount = 3; //Get amount of objectives
+    private int objectiveCount = 25; //Get amount of objectives
 
     private int round = 0;
     public int roundLimit = 3;

@@ -24,6 +24,11 @@ public class RoundBehaviour : MonoBehaviour {
     }
 
     public void updateObjectiveUI() {
+        foreach (Transform child in GameObject.Find("ObjectiveHolder").transform) {
+            Debug.Log("child destroyed: " + child.gameObject.ToString());
+            Destroy(child.gameObject);
+        }
+
         Destroy(GameObject.Find("ObjectiveHolder").transform.GetChild(0).gameObject);
 
         GameObject clone = (GameObject)Instantiate(objectiveCollection[objective], GameObject.Find("ObjectiveHolder").transform);
