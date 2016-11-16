@@ -3,7 +3,8 @@ using System.Collections;
 
 public class RoundBehaviour : MonoBehaviour {
     public int timeLimit = 90;
-    private int roundNumber = -1;
+    public int roundLimit = 3;
+    private int roundNumber = 0;
     private int objective;
     private GameObject[] objectiveCollection;
     private string objectiveTag = "Objective";
@@ -21,7 +22,6 @@ public class RoundBehaviour : MonoBehaviour {
     }
 
     public void setObjective(int index) {
-        //Debug.Log(objectiveCollection[index]);
         this.objective = index;
     }
 

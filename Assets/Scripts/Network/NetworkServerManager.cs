@@ -9,7 +9,9 @@ public class NetworkServerManager : MonoBehaviour {
     private NetworkClientManager clientManager;
     private bool first = true;
     private int objectiveCount = 3; //Get amount of objectives
-    public int round = 0;
+
+    private int round = 0;
+    public int roundLimit = 3;
 
     void Start() {
         clientManager = (NetworkClientManager)GetComponent(typeof(NetworkClientManager));
