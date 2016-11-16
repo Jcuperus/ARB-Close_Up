@@ -5,10 +5,7 @@ public class WalkingScript : MonoBehaviour {
     public int speed = 60;
     public int directionChangeTimer = 3;
     public bool isMoving = true;
-    public GameObject northBoundary;
-    public GameObject eastBoundary;
-    public GameObject southBoundary;
-    public GameObject westBoundary;
+    public Vector3 fieldDim;
     private Vector3 rotation = new Vector3();
     private Vector3 spawnPos;
 
@@ -16,7 +13,8 @@ public class WalkingScript : MonoBehaviour {
 	void Awake () {
         rotation.Set(0,Random.Range(0, 360),0);
         StartCoroutine(changeDirection());
-        spawnPos = this.transform.position;
+        spawnPos = this.transform.localPosition;
+        Debug.Log(fieldDim.ToString());
     }
 	
 	// Update is called once per frame
@@ -24,9 +22,10 @@ public class WalkingScript : MonoBehaviour {
         if(isMoving) {
             this.transform.Translate(new Vector3(speed * Time.deltaTime, 0, 0));
             //out of bounds check
-            if(this.transform.position.z>northBoundary.transform.position.z || this.transform.position.z < southBoundary.transform.position.z || this.transform.position.x < westBoundary.transform.position.x || this.transform.position.x > eastBoundary.transform.position.x) {
+            Vector3 pos = this.transform.localPosition;
+            if(pos.x < -1.5 || pos.x > 1.5 || pos.z < -1.5 || pos.z > 1.5) {
                 Debug.Log("out of bounds detected: "+this.ToString());
-                this.transform.position = spawnPos;
+                this.transform.localPosition = spawnPos;
             }
         }
     }
