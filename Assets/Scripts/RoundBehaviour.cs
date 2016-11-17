@@ -5,6 +5,8 @@ public class RoundBehaviour : MonoBehaviour {
     public int timeLimit = 90;
     public int roundLimit = 3;
     private int roundNumber = 0;
+    private int wrongAnswerDelay = 5;
+    private bool canSelect = true;
     private int objective;
     private GameObject[] objectiveCollection;
     private string objectiveTag = "Objective";
@@ -58,5 +60,15 @@ public class RoundBehaviour : MonoBehaviour {
 
     public bool checkObjective(GameObject selection) {
         return selection.Equals(objectiveCollection[objective]);
-    }    
+    }
+
+    public bool getCanSelect() {
+        return this.canSelect;
+    }
+
+    public IEnumerator disableSelection() {
+        canSelect = false;
+        yield return new WaitForSeconds(wrongAnswerDelay);
+        canSelect = true;
+    }
 }

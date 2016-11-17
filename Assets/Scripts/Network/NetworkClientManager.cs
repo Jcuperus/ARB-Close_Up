@@ -56,6 +56,7 @@ public class NetworkClientManager : MonoBehaviour {
 
                 //winner panel show subroutine
                 StartCoroutine(uiManager.showWinnerPanel(json.name));
+                StartCoroutine(round.disableSelection());
                 objective = json.objective;
                 round.startRound(objective);
                 round.updateObjectiveUI();

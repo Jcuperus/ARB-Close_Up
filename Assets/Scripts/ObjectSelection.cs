@@ -6,8 +6,6 @@ public class ObjectSelection : MonoBehaviour {
     private RaycastHit hitInfo;
     public LayerMask colLayer;
     public RoundBehaviour round;
-    private bool canSelect = true;
-    private int wrongAnswerDelay = 5;
 
 	// Use this for initialization
 	void Start () {
@@ -40,7 +38,7 @@ public class ObjectSelection : MonoBehaviour {
         RaycastHit rhit;
         GameObject gObjectHit = null;
         
-        if (Physics.Raycast(ray, out rhit, 1000.0f) && canSelect)
+        if (Physics.Raycast(ray, out rhit, 1000.0f) && round.getCanSelect())
         {
             UIManager uiManager = (UIManager)GameObject.Find("Managers").GetComponent(typeof(UIManager));
             if (round.checkObjective(rhit.transform.gameObject)) {
@@ -52,14 +50,10 @@ public class ObjectSelection : MonoBehaviour {
             else {
                 Debug.Log("Incorrect selection");
                 StartCoroutine(uiManager.triggerFeedbackPopup(false));
-                StartCoroutine(disableSelection());
+                StartCoroutine(round.disableSelection());
             }
         }
     }
 
-    IEnumerator disableSelection() {
-        canSelect = false;
-        yield return new WaitForSeconds(wrongAnswerDelay);
-        canSelect = true;
-    }
+    
 }

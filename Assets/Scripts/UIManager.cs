@@ -61,7 +61,7 @@ public class UIManager : MonoBehaviour {
 
     public IEnumerator triggerFeedbackPopup(bool correct) {
         showFeedbackPopup(correct, true);
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(5);
         showFeedbackPopup(correct, false);
     }
 
