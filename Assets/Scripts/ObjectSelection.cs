@@ -46,6 +46,7 @@ public class ObjectSelection : MonoBehaviour {
                 StartCoroutine(uiManager.triggerFeedbackPopup(true));
                 NetworkClientManager clientManager = (NetworkClientManager)GameObject.Find("Managers").GetComponent(typeof(NetworkClientManager));
                 clientManager.sendWinnerMessageToServer();
+                StartCoroutine(round.disableSelection());
             }
             else {
                 Debug.Log("Incorrect selection");
