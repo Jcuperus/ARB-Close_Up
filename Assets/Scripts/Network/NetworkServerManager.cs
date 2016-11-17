@@ -11,7 +11,7 @@ public class NetworkServerManager : MonoBehaviour {
     private int objectiveCount = 25; //Get amount of objectives
 
     private int round = 1;
-    public int roundLimit = 3;
+    public int roundLimit = 5;
 
     void Start() {
         clientManager = (NetworkClientManager)GetComponent(typeof(NetworkClientManager));
@@ -105,7 +105,7 @@ public class NetworkServerManager : MonoBehaviour {
     private string scoreboardToString(Dictionary<string, int> scoreboard) {
         string tmp = "";
         foreach (KeyValuePair<string, int> item in scoreboard) {
-            tmp += serverPlayerList[item.Key] + ": " + item.Value + "point(s) \r";
+            tmp += serverPlayerList[item.Key] + ": " + item.Value + "point(s) \n";
         }
         return tmp;
     }
