@@ -82,6 +82,7 @@ public class UIManager : MonoBehaviour {
         winnerPanel.SetActive(true);
         winnerPanel.transform.Find("PlayerNameLabel").GetComponent<Text>().text = winner;
         yield return new WaitForSeconds(5);
+        GameObject.Find("Managers").GetComponent<RoundBehaviour>().updateObjectiveUI();
         winnerPanel.SetActive(false);
     }
 }
