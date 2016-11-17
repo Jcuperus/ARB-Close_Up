@@ -10,7 +10,7 @@ public class NetworkServerManager : MonoBehaviour {
     private bool first = true;
     private int objectiveCount = 25; //Get amount of objectives
 
-    private int round = 0;
+    private int round = 1;
     public int roundLimit = 3;
 
     void Start() {
@@ -55,6 +55,15 @@ public class NetworkServerManager : MonoBehaviour {
                 foreach (KeyValuePair<string, int> score in serverScoreList) {
                     Debug.Log(score.Key + ": " + score.Value + "point(s)");
                 }
+
+                round++;
+                if (round > roundLimit) {
+                    //Game end message to clients
+                    Debug.Log("game end");
+                    sendEndMessageToClient();
+                }
+                Debug.Log(scoreboardToString(serverScoreList));
+                Debug.Log("Round end: " + round + "/" + roundLimit);
                 break;
             case "name":
                 Debug.Log("Server Message type: name: " + json.name);
@@ -85,6 +94,20 @@ public class NetworkServerManager : MonoBehaviour {
         string jsonPlayerList = JsonUtility.ToJson(new NetworkInstanceVars("winner", serverPlayerList[ip], objective));
         NetworkMessageBase clientMessage = new NetworkMessageBase(jsonPlayerList);
         NetworkServer.SendToAll(1337, clientMessage);
+    }
+
+    private void sendEndMessageToClient() {
+        string jsonPlayerList = JsonUtility.ToJson(new NetworkInstanceVars("end", scoreboardToString(serverScoreList)));
+        NetworkMessageBase clientMessage = new NetworkMessageBase(jsonPlayerList);
+        NetworkServer.SendToAll(1337, clientMessage);
+    }
+
+    private string scoreboardToString(Dictionary<string, int> scoreboard) {
+        string tmp = "";
+        foreach (KeyValuePair<string, int> item in scoreboard) {
+            tmp += serverPlayerList[item.Key] + ": " + item.Value + "point(s) \r";
+        }
+        return tmp;
     }
 
 
