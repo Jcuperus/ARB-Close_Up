@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour {
     private Image CorrectFeedbackPopupImage;
     private NetworkClientManager clientManager;
     private NetworkServerManager serverManager;
+    private string victoryMessage;
 
     void Start() {
         DontDestroyOnLoad(this.gameObject);
@@ -84,5 +85,13 @@ public class UIManager : MonoBehaviour {
         yield return new WaitForSeconds(5);
         GameObject.Find("Managers").GetComponent<RoundBehaviour>().updateObjectiveUI();
         winnerPanel.SetActive(false);
+    }
+
+    public void setVictoryMessage(string message) {
+        victoryMessage = message;
+    }
+
+    public string getVictoryMessage() {
+        return victoryMessage;
     }
 }

@@ -61,6 +61,11 @@ public class NetworkClientManager : MonoBehaviour {
                 round.startRound(objective);
                 Debug.Log("objective: " + objective);
                 break;
+            case "end":
+                Debug.Log("game end");
+                SceneManager.LoadScene("VictoryScene");
+                uiManager.setVictoryMessage(json.name);
+                break;
             default:
                 Debug.Log("unknown message from server type: " + json.messageType);
                 break;
