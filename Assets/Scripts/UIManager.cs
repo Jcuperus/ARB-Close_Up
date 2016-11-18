@@ -53,6 +53,10 @@ public class UIManager : MonoBehaviour {
         serverManager.startRound();
     }
 
+    public void handleQuit() {
+        Application.Quit();
+    }
+
     public void updatePlayerListUI(List<string> clientPlayerList) {
         GameObject.Find("PlayerListText").GetComponent<Text>().text = "";
         foreach(string name in clientPlayerList) {
